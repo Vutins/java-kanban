@@ -4,15 +4,13 @@ import classes.enums.Class;
 
 public class Subtask extends Task {
 
-    private int id;
-    private String title;
-    private String description;
-    private Class typeClass;
+    public Subtask(String title, String description) {
+        super(title, description);
+    }
 
     @Override
-    public void setTypeClass(Object obj) {   //подумать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.typeClass = Class.TASK;
-        obj = typeClass;
+    public Class getTaskClass() {
+        return Class.SUBTASK;
     }
 
 }

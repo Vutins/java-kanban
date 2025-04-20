@@ -8,10 +8,12 @@ public class Task {
     private int id;
     private String title;
     private String description;
-     private Status status;
-     private Class typeClass;
+    private Status status;
 
-    public Task() {
+
+    public Task(String title, String description) {
+        this.title = title;
+        this.description = description;
         this.status = Status.NEW;
     }
 
@@ -31,6 +33,10 @@ public class Task {
         return status;
     }
 
+    public Class getTaskClass() {
+        return Class.TASK;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -46,33 +52,4 @@ public class Task {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    public void setTypeClass(Object obj) {   //подумать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.typeClass = Class.TASK;
-        obj = typeClass;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
 }

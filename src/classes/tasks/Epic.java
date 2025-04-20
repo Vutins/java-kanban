@@ -5,25 +5,23 @@ import java.util.HashMap;
 
 public class Epic extends Task {
 
-    private int id;
-    private String title;
-    private String description;
     private HashMap<Integer, Subtask> epicSubtasks;
-    private Class typeClass;
 
     public Epic(String title, String description) {
+        super(title,description);
         epicSubtasks = new HashMap<>();
     }
 
+    public void putSubtask(Subtask subtask) {
+        epicSubtasks.put(getId(), subtask);
+    }
+
+    public HashMap<Integer, Subtask> getEpicSubtasks() {
+        return epicSubtasks;
+    }
+
     @Override
-    public void setTypeClass(Object obj) {   //подумать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.typeClass = Class.EPIC;
-        obj = typeClass;
+    public Class getTaskClass() {
+        return Class.EPIC;
     }
-
-    public void addSubtask(Integer id, Subtask subtask) {
-        epicSubtasks.put(id, subtask);
-    }
-
-
 }

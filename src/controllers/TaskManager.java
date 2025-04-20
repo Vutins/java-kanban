@@ -1,26 +1,24 @@
 package controllers;
 
 import classes.tasks.Task;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TaskManager {
 
-    private ArrayList<Task> taskMaster;
+    private HashMap<Integer, Task> taskMaster;
     private Integer id;
-    private Task task;
+
 
     public TaskManager() {
-        taskMaster = new ArrayList<>();
+        taskMaster = new HashMap<>();
         id = 0;
-        task = new Task();
     }
 
-    public ArrayList<Task> getTaskMaster() {
+    public HashMap<Integer, Task> getTaskMaster() {
         return taskMaster;
     }
 
-    public void CountId() {
-        task.setId(id);
-        id++;
+    public void putTask(Task task) {
+        taskMaster.put(id++, task);
     }
 }
