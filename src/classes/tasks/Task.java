@@ -3,6 +3,8 @@ package classes.tasks;
 import classes.enums.Status;
 import classes.enums.Class;
 
+import java.util.Objects;
+
 public class Task {
 
     private int id;
@@ -15,6 +17,14 @@ public class Task {
         this.title = title;
         this.description = description;
         this.status = Status.NEW;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -37,19 +47,15 @@ public class Task {
         return Class.TASK;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        Task task = (Task) object;
+        return id == task.id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

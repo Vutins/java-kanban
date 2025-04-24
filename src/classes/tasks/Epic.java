@@ -1,6 +1,9 @@
 package classes.tasks;
 
 import classes.enums.Class;
+import classes.enums.Status;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Epic extends Task {
@@ -12,8 +15,8 @@ public class Epic extends Task {
         epicSubtasks = new HashMap<>();
     }
 
-    public void putSubtask(Subtask subtask) {
-        epicSubtasks.put(getId(), subtask);
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<Subtask>(epicSubtasks.values());
     }
 
     public HashMap<Integer, Subtask> getEpicSubtasks() {
@@ -23,5 +26,31 @@ public class Epic extends Task {
     @Override
     public Class getTaskClass() {
         return Class.EPIC;
+    }
+
+    public void checkStatus() {
+        if(epicSubtasks.isEmpty()) {
+            setStatus(Status.NEW);
+        }
+
+        boolean check = false;
+
+        for (Subtask subtask : epicSubtasks.values()) {
+            if (subtask.getStatus() == Status.NEW) {
+                setStatus(Status.NEW);
+            } else {
+                setStatus(Status.IN_PROGRESS);
+            }
+
+            if (subtask.getStatus() == Status.DONE) {
+                check = true;
+            } else {
+                check = false;
+            }
+        }
+
+        if(check) {
+            setStatus(Status.DONE);
+        }
     }
 }
