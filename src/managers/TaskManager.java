@@ -77,7 +77,7 @@ public class TaskManager {
         for (Integer id : toRemoveSubtasks) {
             subtaskMaster.remove(id);
         }
-        epic.getSubtasks().clear();
+        epic.getEpicSubtasks().clear();
     }
 
     public Task getTaskById(Integer id) {
