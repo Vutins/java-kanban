@@ -1,6 +1,6 @@
 package classes.enums;
 
-public enum Class {
+public enum TaskType {
     TASK,
     EPIC,
     SUBTASK

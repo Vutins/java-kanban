@@ -1,25 +1,25 @@
 package classes.tasks;
 
-import classes.enums.Status;
-import classes.enums.Class;
+import classes.enums.TaskType;
+import classes.enums.TaskStatus;
 
 import java.util.Objects;
 
 public class Task {
 
-    private int id;
-    private String title;
-    private String description;
-    private Status status;
+    protected int id;
+    protected String title;
+    protected String description;
+    protected TaskStatus status;
 
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = Status.NEW;
+        this.status = TaskStatus.NEW;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -39,12 +39,12 @@ public class Task {
         return description;
     }
 
-    public Status getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public Class getTaskClass() {
-        return Class.TASK;
+    public TaskType getTaskClass() {
+        return TaskType.TASK;
     }
 
     @Override

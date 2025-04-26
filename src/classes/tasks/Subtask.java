@@ -1,25 +1,22 @@
 package classes.tasks;
 
-import classes.enums.Class;
+import classes.enums.TaskType;
 
 public class Subtask extends Task {
 
-    private Integer motherId;
+    private Integer epicId;
 
-    public Subtask(String title, String description) {
+    public Subtask(String title, String description, Integer epicId) {
         super(title, description);
+        this.epicId = epicId;
     }
 
-    public void setMotherId(Integer id) {
-        this.motherId = id;
-    }
-
-    public Integer getMotherId() {
-        return motherId;
+    public Integer getEpicId() {
+        return epicId;
     }
 
     @Override
-    public Class getTaskClass() {
-        return Class.SUBTASK;
+    public TaskType getTaskClass() {
+        return TaskType.SUBTASK;
     }
 }
