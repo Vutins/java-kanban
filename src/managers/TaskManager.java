@@ -1,6 +1,5 @@
 package managers;
 
-import classes.enums.TaskType;
 import classes.enums.TaskStatus;
 import classes.tasks.Epic;
 import classes.tasks.Subtask;
@@ -95,6 +94,7 @@ public class TaskManager {
     public void addTask(Task task) {
         task.setId(id++);
         taskMaster.put(task.getId(), task);
+
     }
 
     public void addEpic(Epic epic) {
@@ -102,24 +102,24 @@ public class TaskManager {
         epicMaster.put(epic.getId(), epic);
     }
 
-    public void addSubtask(Epic epic, Subtask subtask) {
+    public void addSubtask(Subtask subtask) {
         subtask.setId(id++);
         subtaskMaster.put(subtask.getId(), subtask);
-        epic.getEpicSubtasks().put(subtask.getId(), subtask);
+        epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
     }
 
-    public void updateTask(Integer id, Task task) {
-        taskMaster.put(id, task);
+    public void updateTask(Task task) {
+        taskMaster.put(task.getId(), task);
     }
 
-    public void updateEpic(Integer id, Epic epic) {
-        epicMaster.put(id, epic);
+    public void updateEpic(Epic epic) {
+        epicMaster.put(epic.getId(), epic);
     }
 
-    public void updateSubtask(Integer id, Subtask subtask) {
-        subtaskMaster.put(id, subtask);
-        epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(id, subtask);
-
+    public void updateSubtask(Subtask subtask) {
+        subtaskMaster.put(subtask.getId(), subtask);
+        epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
+        checkStatus();
     }
 
     public void removeTaskById(Integer id) {
@@ -135,7 +135,7 @@ public class TaskManager {
         subtaskMaster.remove(id);
     }
 
-    public void checkStatus() {
+    private void checkStatus() {
         for(Epic epic : epicMaster.values()) {
             if (epic.getEpicSubtasks().isEmpty()) {
                 epic.setStatus(TaskStatus.NEW);
@@ -148,12 +148,16 @@ public class TaskManager {
                     epic.setStatus(TaskStatus.NEW);
                 } else {
                     epic.setStatus(TaskStatus.IN_PROGRESS);
+                    break;
                 }
+            }
 
+            for (Subtask subtask : epic.getEpicSubtasks().values()) {
                 if (subtask.getStatus() == TaskStatus.DONE) {
                     check = true;
                 } else {
                     check = false;
+                    break;
                 }
             }
 

@@ -1,7 +1,6 @@
 package classes.tasks;
 
 import classes.enums.TaskType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,6 +25,4 @@ public class Epic extends Task {
     public TaskType getTaskClass() {
         return TaskType.EPIC;
     }
-
-
 }
