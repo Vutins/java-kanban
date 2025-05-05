@@ -5,6 +5,7 @@ import classes.tasks.Subtask;
 import classes.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -34,5 +35,5 @@ public interface TaskManager {
     void removeEpicById(Integer id);
     void removeSubtaskById(Integer id);
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 }

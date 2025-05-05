@@ -31,13 +31,6 @@ class EpicTest {
     }
 
     @Test
-    void shouldNotAddEpicInEpicList() {
-        Subtask subtask2 = new Subtask("subtask2", "delau subtask2", epic1.getId());
-        taskManager.addSubtask(subtask2);
-        //помогите, пожалуйста, не знаю как реализовать этот тест - "проверьте, что объект Epic нельзя добавить в самого себя в виде подзадачи;"
-    }
-
-    @Test
     void shouldReturnWorkManagers() {
         HistoryManager historyManager = Managers.getDefaultHistory();
         historyManager.add(epic1);
