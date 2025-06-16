@@ -3,30 +3,60 @@ package managers;
 import classes.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class InMemoryHistoryManager implements HistoryManager {
+public class InMemoryHistoryManager<T> implements HistoryManager {
 
-    private ArrayList<Task> historyOfTasks;
+    private Map<Integer, Node<T>> mapHistory;
+    private Node<T> head;
+    private Node<T> tail;
 
     public InMemoryHistoryManager() {
-        historyOfTasks = new ArrayList<>();
+        mapHistory = new HashMap<>();
+        head = null;
+        tail = null;
     }
 
     @Override
     public void add(Task task) {
-        historyOfTasks.add(task);
+        Node<Task> newNode = new Node<>(task);
+        if (head == null) {
+            head = (Node<T>) newNode;
+            tail = (Node<T>) newNode;
+        } else {
+            tail.next = (Node<T>) newNode;
+            newNode.prev = (Node<Task>) tail;
+            tail = (Node<T>) newNode;
+        }
+        mapHistory.put(task.getId(), (Node<T>) newNode);
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        if (historyOfTasks.size() > 10) {
-            for (int i = 0; i < historyOfTasks.size(); i++) {
-                historyOfTasks.remove(i);
-                if (historyOfTasks.size() <= 10) {
-                    break;
-                }
-            }
+    public List<Task> getHistory() {
+        List<Task> taskList = new ArrayList<>();
+        for (Node<T> task : mapHistory.values()) {
+            taskList.add((Task) task.data);
         }
-        return historyOfTasks;
+        return taskList;
+    }
+
+    public void remove(int id) {
+        mapHistory.remove(id);
+    }
+
+
+}
+
+class Node<T> {
+    public T data;
+    public Node<T> next;
+    public Node<T> prev;
+
+    public Node(T data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
     }
 }
