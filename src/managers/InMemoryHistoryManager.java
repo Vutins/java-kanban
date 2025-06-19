@@ -85,7 +85,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         historyMap.remove(node.data.getId());
     }
-
 }
 
 class Node {

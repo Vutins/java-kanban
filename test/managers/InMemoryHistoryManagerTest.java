@@ -46,8 +46,6 @@ public class InMemoryHistoryManagerTest {
         for (Subtask subtask : taskManager.getSubtasks()) {
             System.out.println(subtask);
         }
-
-
     }
 
     @Test
@@ -85,17 +83,12 @@ public class InMemoryHistoryManagerTest {
         }
 
         taskManager.removeTaskById(task1.getId());
-        taskManager.removeEpicById(epic1.getId());
         taskManager.removeSubtaskById(subtask1.getId());
+        taskManager.removeEpicById(epic1.getId());
 
         System.out.println("История после очистки:");
         for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
     }
-
-
-
-    
-
 }
