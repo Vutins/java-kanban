@@ -2,7 +2,6 @@ import classes.enums.TaskStatus;
 import classes.tasks.Epic;
 import classes.tasks.Subtask;
 import classes.tasks.Task;
-import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
 
@@ -15,12 +14,10 @@ public class Main {
 
         Epic epic1 = new Epic("Эпик 1","Нужно сделать");
         taskManager.addEpic(epic1);
-        System.out.println(epic1.toString());
 
         Subtask subtask1 = new Subtask("Subtask1 создания ",
                 "Написать что то ", epic1.getId());
         taskManager.addSubtask(subtask1);
-        System.out.println(subtask1.toString());
 
         Subtask subtask2 = new Subtask("Subtask2 создания ",
                 "Написать что то ", epic1.getId());
@@ -47,7 +44,6 @@ public class Main {
        taskManager.getTaskById(3);
 
         printAllTasks(taskManager);
-
     }
 
    private static void printAllTasks(TaskManager manager) {
