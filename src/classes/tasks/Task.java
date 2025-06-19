@@ -10,7 +10,7 @@ public class Task {
     protected int id;
     protected String title;
     protected String description;
-    protected TaskStatus status ;
+    protected TaskStatus status;
 
 
     public Task(String title, String description) {
