@@ -12,7 +12,7 @@ public class InMemoryHistoryManagerTest {
     Task task2;
     Epic epic1;
     Subtask subtask1;
-    static HistoryManager historyManager;
+    HistoryManager historyManager;
 
     @BeforeEach
     void startProgram() {

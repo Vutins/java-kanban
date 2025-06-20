@@ -2,10 +2,7 @@ package managers;
 
 import classes.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
@@ -60,6 +57,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         for (Node node : historyMap.values()) {
             historyTasks.add(node.data);
         }
+        Collections.reverse(historyTasks);
         return historyTasks;
     }
 
