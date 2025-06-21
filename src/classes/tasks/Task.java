@@ -49,15 +49,15 @@ public class Task {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null) return false;
+        if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        if (this.getId() == task.getId()) return true;
-        return id == task.id;
+        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description)
+                && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, title, description, status);
     }
 
     @Override
