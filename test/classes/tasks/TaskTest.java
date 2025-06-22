@@ -71,6 +71,6 @@ class TaskTest {
         ArrayList<Task> history = new ArrayList<>(taskManager.getHistory());
         assertNotNull(history, "история пуста");
         assertEquals(2, history.size());
-        assertEquals(task1, history.getFirst());
+        assertEquals(task1, history.getLast());
     }
 }

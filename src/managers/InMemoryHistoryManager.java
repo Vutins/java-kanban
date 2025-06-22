@@ -2,31 +2,87 @@ package managers;
 
 import classes.tasks.Task;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private ArrayList<Task> historyOfTasks;
+    private Map<Integer, Node> historyMap;
+    private Node head;
+    private Node tail;
+    private List<Task> historyAdd;
 
     public InMemoryHistoryManager() {
-        historyOfTasks = new ArrayList<>();
+        historyMap = new HashMap<>();
+        head = null;
+        tail = null;
+        historyAdd = new ArrayList<>();
     }
 
     @Override
     public void add(Task task) {
-        historyOfTasks.add(task);
+        Node existingNode = historyMap.get(task.getId());
+        if (existingNode != null) {
+            removeNode(existingNode);
+        }
+        historyAdd.add(task);
+        linkLast(task);
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        if (historyOfTasks.size() > 10) {
-            for (int i = 0; i < historyOfTasks.size(); i++) {
-                historyOfTasks.remove(i);
-                if (historyOfTasks.size() <= 10) {
-                    break;
-                }
-            }
+    public List<Task> getHistory() {
+        return getTasks();
+    }
+
+    public void remove(int id) {
+        if (historyMap.get(id) != null) {
+            removeNode(historyMap.get(id));
         }
-        return historyOfTasks;
+    }
+
+    public void linkLast(Task task) {
+        Node newNode = new Node(task);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        historyMap.put(task.getId(), newNode);
+    }
+
+    public List<Task> getTasks() {
+        List<Task> historyTasks = new ArrayList<>();
+        for (Node node : historyMap.values()) {
+            historyTasks.add(node.data);
+        }
+        Collections.reverse(historyTasks);
+        return historyTasks;
+    }
+
+    public void removeNode(Node node) {
+        if (node == null) {
+            return;
+        }
+
+        if (historyMap.get(node.data.getId()).prev == null) {
+            if (historyMap.get(node.data.getId()).next != null) {
+                historyMap.get(node.data.getId()).next.prev = null;
+                head = historyMap.get(node.data.getId()).next;
+            } else {
+                head = null;
+                tail = null;
+            }
+        } else if (historyMap.get(node.data.getId()).next == null) {
+            historyMap.get(node.data.getId()).prev.next = null;
+            tail = historyMap.get(node.data.getId()).prev;
+        } else {
+            historyMap.get(node.data.getId()).prev.next = historyMap.get(node.data.getId()).next;
+            historyMap.get(node.data.getId()).next.prev = historyMap.get(node.data.getId()).prev;
+        }
+        historyMap.remove(node.data.getId());
     }
 }
+
+
