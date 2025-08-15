@@ -4,24 +4,32 @@ import classes.tasks.Epic;
 import classes.tasks.Subtask;
 import classes.tasks.Task;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class FileBackedTaskManagerTest {
+    TaskManager taskManager;
+    Task task1;
+    Task task2;
+    Epic epic1;
 
+    @BeforeEach
+    void startProgram() throws IOException {
+        taskManager = new FileBackedTaskManager(Path.of(String.valueOf(File.createTempFile("data", ".txt"))));
 
+        task1 = new Task("delo1", "delau delo1");
+        task2 = new Task("delo2", "delau delo2");
+        epic1 = new Epic("epic1", "delau epic1");
+    }
 
     @Test
-    void startProgram() throws IOException {
-        TaskManager taskManager = new FileBackedTaskManager(Path.of("T:\\test\\testFile.txt"));
-
-        Task task1 = new Task("delo1", "delau delo1");
+    void shouldAddTasksInFile() {
         taskManager.addTask(task1);
-        Task task2 = new Task("delo2", "delau delo2");
         taskManager.addTask(task2);
-        Epic epic1 = new Epic("epic1", "delau epic1");
         taskManager.addEpic(epic1);
         Subtask subtask1 = new Subtask("subtask1", "delau subtask1", epic1.getId());
         taskManager.addSubtask(subtask1);
@@ -48,8 +56,6 @@ public class FileBackedTaskManagerTest {
 
     @Test
     void shouldShowAllTasksFromStartProgram1() throws IOException {
-        TaskManager taskManager = new FileBackedTaskManager(Path.of("T:\\test\\testFile.txt"));
-
         System.out.println("Задачи:");
         for (Task task : taskManager.getTasks()) {
             System.out.println(task);
@@ -74,9 +80,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void ShouldShowTAsksWithoutDeletedTasks() throws IOException {
-        TaskManager taskManager = new FileBackedTaskManager(Path.of("T:\\test\\testFile.txt"));
-
+    void ShouldShowTAsksWithoutDeletedTasks() {
         System.out.println("Задачи:");
         for (Task task : taskManager.getTasks()) {
             System.out.println(task);
