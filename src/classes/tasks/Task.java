@@ -12,7 +12,6 @@ public class Task {
     protected String description;
     protected TaskStatus status;
 
-
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
@@ -54,7 +53,6 @@ public class Task {
         if (this.getId() == task.getId()) return true;
         return id == task.id;
     }
-
 
     @Override
     public int hashCode() {

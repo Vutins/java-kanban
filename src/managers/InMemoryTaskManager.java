@@ -5,6 +5,7 @@ import classes.tasks.Epic;
 import classes.tasks.Subtask;
 import classes.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,10 +167,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeSubtaskById(Integer id) {
-        epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
-        historyManager.remove(id);
-        subtaskMaster.remove(id);
+    public void removeSubtaskById(Integer id) throws IOException {
+        if(taskMaster.get(id) != null) {
+            epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
+            historyManager.remove(id);
+            subtaskMaster.remove(id);
+        }
     }
 
     @Override
