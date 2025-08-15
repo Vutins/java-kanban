@@ -16,7 +16,7 @@ public class InMemoryHistoryManagerTest {
     Subtask subtask1;
     HistoryManager historyManager;
 
-
+    @BeforeEach
     void startProgram() {
         taskManager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
