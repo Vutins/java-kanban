@@ -13,7 +13,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private Path saveFile;
 
-    FileBackedTaskManager(Path saveFile) {
+    public FileBackedTaskManager(Path saveFile) {
         this.saveFile = saveFile;
     }
 
@@ -106,7 +106,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             writer.close();
         } catch (ManagerSaveException exception) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("задача не была сохранена");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
