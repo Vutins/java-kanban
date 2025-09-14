@@ -5,6 +5,8 @@ import classes.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 public class InMemoryHistoryManagerTest {
 
     TaskManager taskManager;
@@ -71,7 +73,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldDeleteTaskFromHistoryMapById() {
+    void shouldDeleteTaskFromHistoryMapById() throws IOException {
         taskManager.getTaskById(task1.getId());
         taskManager.getTaskById(task2.getId());
         taskManager.getEpicById(epic1.getId());

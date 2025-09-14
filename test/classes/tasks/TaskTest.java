@@ -33,7 +33,7 @@ class TaskTest {
 
     @Test
     void shouldEqualsById() {
-        assertEquals(0, task1.getId());
+        assertEquals(1, task1.getId());
         assertNotEquals(task1.getId(), task2.getId());
     }
 

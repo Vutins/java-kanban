@@ -4,6 +4,7 @@ import classes.tasks.Epic;
 import classes.tasks.Subtask;
 import classes.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public interface TaskManager {
 
     void removeEpicById(Integer id);
 
-    void removeSubtaskById(Integer id);
+    void removeSubtaskById(Integer id) throws IOException;
 
     List<Task> getHistory();
 }

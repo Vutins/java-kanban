@@ -5,6 +5,7 @@ import classes.tasks.Epic;
 import classes.tasks.Subtask;
 import classes.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskMaster;
     private HashMap<Integer, Epic> epicMaster;
     private HashMap<Integer, Subtask> subtaskMaster;
-    private Integer id = 0;
+    private Integer id = 1;
     private HistoryManager historyManager;
 
     public InMemoryTaskManager() {
@@ -129,10 +130,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask subtask) {
-        subtask.setId(id++);
-        subtaskMaster.put(subtask.getId(), subtask);
-        if (!subtask.getId().equals(subtask.getEpicId())) {
-            epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
+        if (epicMaster.get(subtask.getEpicId()) != null) {
+            subtask.setId(id++);
+            subtaskMaster.put(subtask.getId(), subtask);
+            if (!subtask.getId().equals(subtask.getEpicId())) {
+                epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
+            }
         }
     }
 
@@ -166,10 +169,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeSubtaskById(Integer id) {
-        epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
-        historyManager.remove(id);
-        subtaskMaster.remove(id);
+    public void removeSubtaskById(Integer id) throws IOException {
+        if (taskMaster.get(id) != null) {
+            epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
+            historyManager.remove(id);
+            subtaskMaster.remove(id);
+        }
     }
 
     @Override
