@@ -85,7 +85,9 @@ public class Task {
        if (status.equals(TaskStatus.IN_PROGRESS)) {
             startTime = LocalDateTime.now();
        } else if (status.equals(TaskStatus.DONE)) {
-           duration = Duration.between(startTime, LocalDateTime.now());
+           if (startTime != null) {
+               duration = Duration.between(startTime, LocalDateTime.now());
+           }
        }
     }
 
