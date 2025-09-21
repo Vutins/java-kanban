@@ -6,9 +6,9 @@ import classes.tasks.Subtask;
 import classes.tasks.Task;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -17,12 +17,14 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Subtask> subtaskMaster;
     private Integer id = 1;
     private HistoryManager historyManager;
+    private TreeSet<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         taskMaster = new HashMap<>();
         epicMaster = new HashMap<>();
         subtaskMaster = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        settingsPrioritizedTasks();
     }
 
     @Override
@@ -136,17 +138,29 @@ public class InMemoryTaskManager implements TaskManager {
             if (!subtask.getId().equals(subtask.getEpicId())) {
                 epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
             }
+
+            if (epicMaster.get(subtask.getEpicId()).getSubtasks().size() == 1) {
+                epicMaster.get(subtask.getEpicId()).setStartTime(subtask.getStartTime());
+            }
         }
     }
 
     @Override
     public void updateTask(Task task) {
         taskMaster.put(task.getId(), task);
+
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
     }
 
     @Override
     public void updateEpic(Epic epic) {
         epicMaster.put(epic.getId(), epic);
+
+        if (epic.getStartTime() != null) {
+            prioritizedTasks.add(epic);
+        }
     }
 
     @Override
@@ -154,22 +168,35 @@ public class InMemoryTaskManager implements TaskManager {
         subtaskMaster.put(subtask.getId(), subtask);
         epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
         checkStatus();
+
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
+        }
     }
 
     @Override
     public void removeTaskById(Integer id) {
+        if (taskMaster.get(id) != null) {
+            prioritizedTasks.remove(taskMaster.get(id));
+        }
         taskMaster.remove(id);
         historyManager.remove(id);
     }
 
     @Override
     public void removeEpicById(Integer id) {
+        if (epicMaster.get(id) != null) {
+            prioritizedTasks.remove(epicMaster.get(id));
+        }
         epicMaster.remove(id);
         historyManager.remove(id);
     }
 
     @Override
     public void removeSubtaskById(Integer id) throws IOException {
+        if (subtaskMaster.get(id) != null) {
+            prioritizedTasks.remove(subtaskMaster.get(id));
+        }
         if (taskMaster.get(id) != null) {
             epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
             historyManager.remove(id);
@@ -195,6 +222,7 @@ public class InMemoryTaskManager implements TaskManager {
                     epic.setStatus(TaskStatus.NEW);
                 } else {
                     epic.setStatus(TaskStatus.IN_PROGRESS);
+                    epic.setStartTime(subtask.getStartTime());
                     break;
                 }
             }
@@ -210,8 +238,33 @@ public class InMemoryTaskManager implements TaskManager {
 
             if (check) {
                 epic.setStatus(TaskStatus.DONE);
+                epic.setEndTime(LocalDateTime.now());
             }
         }
+    }
+
+    public TreeSet<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
+    protected void settingsPrioritizedTasks() {
+        prioritizedTasks = new TreeSet<>(comparatorStartTime());
+
+        prioritizedTasks.stream()
+                .filter(task -> task.getStartTime() != null)
+                .collect(Collectors.toCollection(TreeSet:: new));
+    }
+
+    private Comparator<Task> comparatorStartTime() {
+        Comparator<Task> comparator = Comparator.comparing(
+                task -> task.getStartTime(),
+                Comparator.nullsFirst(Comparator.naturalOrder()));
+        return comparator;
+    }
+
+    public static boolean checkIntersectionTasks(Task task1, Task task2) {
+        return !task1.getEndTime().isBefore(task2.getStartTime()) &&
+                !task1.getStartTime().isAfter(task2.getEndTime());
     }
 }
 

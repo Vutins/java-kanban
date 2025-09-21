@@ -20,6 +20,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        if (task == null) {
+            return;
+        }
+
         Node existingNode = historyMap.get(task.getId());
         if (existingNode != null) {
             removeNode(existingNode);
