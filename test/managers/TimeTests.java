@@ -40,12 +40,6 @@ public class TimeTests {
     }
 
     @Test
-    void startProgram() {
-        // Теперь этот тест только проверяет, что инициализация работает
-        System.out.println("Программа запущена с тестовыми данными");
-    }
-
-    @Test
     void shouldChangeTasksStatusAndSaveStartTime() {
         Task task = taskManager.getTaskById(1);
         if (task != null) {

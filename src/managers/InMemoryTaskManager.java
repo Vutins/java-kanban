@@ -262,7 +262,7 @@ public class InMemoryTaskManager implements TaskManager {
         return comparator;
     }
 
-    public static boolean checkIntersectionTasks(Task task1, Task task2) {
+    private static boolean checkIntersectionTasks(Task task1, Task task2) {
         return !task1.getEndTime().isBefore(task2.getStartTime()) &&
                 !task1.getStartTime().isAfter(task2.getEndTime());
     }
