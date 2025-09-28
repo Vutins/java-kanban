@@ -94,7 +94,6 @@ public class FileBackedTaskManagerTest {
         for (Subtask subtask : taskManager.getSubtasks()) {
             System.out.println(subtask);
         }
-
         taskManager.removeTaskById(0);
         taskManager.removeSubtaskById(3);
     }
