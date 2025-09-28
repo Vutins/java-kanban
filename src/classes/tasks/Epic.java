@@ -10,8 +10,13 @@ import java.util.HashMap;
 
 public class Epic extends Task {
 
-    private final HashMap<Integer, Subtask> epicSubtasks;
+    private HashMap<Integer, Subtask> epicSubtasks;
     private LocalDateTime endTime;
+
+    public Epic() {
+        super();
+        epicSubtasks = new HashMap<>();
+    }
 
     public Epic(String title, String description) {
         super(title,description);

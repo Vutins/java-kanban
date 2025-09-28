@@ -13,8 +13,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private Path saveFile;
 
-    public FileBackedTaskManager(Path saveFile) {
+    public FileBackedTaskManager(Path saveFile) throws IOException {
         this.saveFile = saveFile;
+        loadFromFile(saveFile);
     }
 
     @Override
@@ -128,21 +129,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         fileReader.close();
         return taskManager;
-    }
-
-    public static void main(String[] args) throws IOException {
-        FileBackedTaskManager fileManager = new FileBackedTaskManager(new File("saveTasks2.csv").toPath());
-        fileManager.addTask(new Task("task1", "Купить автомобиль"));
-        fileManager.addEpic(new Epic("new Epic1", "Новый Эпик"));
-        fileManager.addSubtask(new Subtask("New Subtask", "Подзадача", 1));
-        fileManager.addSubtask(new Subtask("New Subtask2", "Подзадача2", 1));
-        System.out.println(fileManager.getTasks());
-        System.out.println(fileManager.getEpics());
-        System.out.println(fileManager.getSubtasks());
-        System.out.println("\n\n" + "new" + "\n\n");
-        FileBackedTaskManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv").toPath());
-        System.out.println(fileBackedTasksManager.getTasks());
-        System.out.println(fileBackedTasksManager.getEpics());
-        System.out.println(fileBackedTasksManager.getSubtasks());
     }
 }
