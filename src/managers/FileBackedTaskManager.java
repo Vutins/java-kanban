@@ -15,7 +15,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public FileBackedTaskManager(Path saveFile) throws IOException {
         this.saveFile = saveFile;
-        loadFromFile(saveFile);
     }
 
     @Override
