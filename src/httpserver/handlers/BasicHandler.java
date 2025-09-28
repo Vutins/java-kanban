@@ -17,8 +17,8 @@ import java.util.Arrays;
 
 class BasicHandler implements HttpHandler {
 
-    final protected TaskManager taskManager;
-    final protected Gson gson = new GsonBuilder()
+    protected final TaskManager taskManager;
+    protected final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .create();
@@ -92,7 +92,7 @@ class BasicHandler implements HttpHandler {
 
     protected void postHandler(HttpExchange exchange) throws IOException {
         String body;
-        try (InputStream is = exchange.getRequestBody()){
+        try (InputStream is = exchange.getRequestBody()) {
             body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
 
