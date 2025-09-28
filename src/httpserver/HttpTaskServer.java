@@ -1,8 +1,7 @@
-package httpServer;
+package httpserver;
 
 import com.sun.net.httpserver.HttpServer;
-import httpServer.handlers.*;
-import managers.HistoryManager;
+import httpserver.handlers.*;
 import managers.Managers;
 import managers.TaskManager;
 

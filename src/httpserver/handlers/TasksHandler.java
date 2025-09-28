@@ -1,14 +1,14 @@
-package httpServer.handlers;
+package httpserver.handlers;
 
-import classes.tasks.Subtask;
+import classes.tasks.Task;
 import com.sun.net.httpserver.HttpExchange;
 import managers.TaskManager;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class SubtasksHandler extends BasicHandler {
+public class TasksHandler extends BasicHandler {
 
-    public SubtasksHandler(TaskManager taskManager) {
+    public TasksHandler(TaskManager taskManager) {
         super(taskManager);
     }
 
@@ -16,9 +16,9 @@ public class SubtasksHandler extends BasicHandler {
     protected void getById(HttpExchange exchange, Integer id) throws IOException {
         String response;
         try {
-            Subtask subtask = taskManager.getSubtaskById(id);
-            if (subtask != null && taskManager.getSubtasks().contains(subtask)) {
-                response = gson.toJson(subtask);
+            Task task = taskManager.getTaskById(id);
+            if (task != null) {
+                response = gson.toJson(task);
                 sendResponse(exchange, response);
             } else {
                 handleNotFound(exchange);
@@ -32,8 +32,8 @@ public class SubtasksHandler extends BasicHandler {
     protected void getList(HttpExchange exchange) throws IOException {
         String response;
         try {
-            if (!taskManager.getSubtasks().isEmpty()) {
-                response = gson.toJson(taskManager.getSubtasks());
+            if (!taskManager.getTasks().isEmpty()) {
+                response = gson.toJson(taskManager.getTasks());
                 sendResponse(exchange, response);
             } else {
                 handleNotFound(exchange);
@@ -46,10 +46,9 @@ public class SubtasksHandler extends BasicHandler {
     @Override
     protected void postUpdate(HttpExchange exchange, Integer id, String body) throws IOException {
         try {
-            Subtask subtask = gson.fromJson(body, Subtask.class);
-            taskManager.updateSubtask(subtask);
-
-            String response = gson.toJson(taskManager.getSubtaskById(id));
+            Task task = gson.fromJson(body, Task.class);
+            taskManager.updateTask(task);
+            String response = gson.toJson(taskManager.getTaskById(id));
             sendResponse(exchange, response);
         } catch (Exception e) {
             handleNotFound(exchange);
@@ -59,10 +58,10 @@ public class SubtasksHandler extends BasicHandler {
     @Override
     protected void postCreate(HttpExchange exchange, String body) throws IOException {
         try {
-            Subtask subtask = gson.fromJson(body, Subtask.class);
-            taskManager.addSubtask(subtask);
+            Task task = gson.fromJson(body, Task.class);
+            taskManager.addTask(task);
 
-            String response = gson.toJson(subtask);
+            String response = gson.toJson(task);
             sendResponse(exchange, response);
         } catch (Exception e) {
             handleNotFound(exchange);
@@ -82,10 +81,10 @@ public class SubtasksHandler extends BasicHandler {
                 Integer id = Integer.parseInt(elements[1]);
                 String response;
 
-                Subtask subtask = taskManager.getSubtaskById(id);
-                if (subtask != null && taskManager.getSubtasks().contains(subtask)) {
-                    response = gson.toJson(subtask);
-                    taskManager.removeSubtaskById(id);
+                Task task = taskManager.getTaskById(id);
+                if (task != null && taskManager.getTasks().contains(task)) {
+                    response = gson.toJson(task);
+                    taskManager.removeTaskById(id);
                     sendResponse(exchange, response);
                 } else {
                     handleNotFound(exchange);

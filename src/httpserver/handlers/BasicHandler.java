@@ -1,10 +1,10 @@
-package httpServer.handlers;
+package httpserver.handlers;
 
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import httpServer.adapters.DurationTypeAdapter;
-import httpServer.adapters.LocalDateTimeTypeAdapter;
+import httpserver.adapters.DurationTypeAdapter;
+import httpserver.adapters.LocalDateTimeTypeAdapter;
 import managers.TaskManager;
 
 import java.io.IOException;
