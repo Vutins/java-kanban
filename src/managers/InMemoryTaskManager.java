@@ -122,12 +122,20 @@ public class InMemoryTaskManager implements TaskManager {
     public void addTask(Task task) {
         task.setId(id++);
         taskMaster.put(task.getId(), task);
+
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
     }
 
     @Override
     public void addEpic(Epic epic) {
         epic.setId(id++);
         epicMaster.put(epic.getId(), epic);
+
+        if (epic.getStartTime() != null) {
+            prioritizedTasks.add(epic);
+        }
     }
 
     @Override
@@ -154,6 +162,9 @@ public class InMemoryTaskManager implements TaskManager {
                 epicMaster.get(subtask.getEpicId()).setStartTime(subtask.getStartTime());
         }
         checkStatus();
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
+        }
     }
 
     @Override
@@ -266,9 +277,21 @@ public class InMemoryTaskManager implements TaskManager {
     protected void settingsPrioritizedTasks() {
         prioritizedTasks = new TreeSet<>(comparatorStartTime());
 
-        prioritizedTasks.stream()
-                .filter(task -> task.getStartTime() != null)
-                .collect(Collectors.toCollection(TreeSet:: new));
+        for (Task task : taskMaster.values()) {
+            if (task.getStartTime() != null) {
+                prioritizedTasks.add(task);
+            }
+        }
+        for (Epic epic : epicMaster.values()) {
+            if (epic.getStartTime() != null) {
+                prioritizedTasks.add(epic);
+            }
+        }
+        for (Subtask subtask : subtaskMaster.values()) {
+            if (subtask.getStartTime() != null) {
+                prioritizedTasks.add(subtask);
+            }
+        }
     }
 
     private Comparator<Task> comparatorStartTime() {

@@ -2,6 +2,7 @@ package classes.tasks;
 
 import classes.enums.TaskStatus;
 import classes.enums.TaskType;
+import com.google.gson.annotations.SerializedName;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 public class Epic extends Task {
 
     private HashMap<Integer, Subtask> epicSubtasks;
+    @SerializedName("endTime")
     private LocalDateTime endTime;
 
     public Epic() {
@@ -55,11 +57,11 @@ public class Epic extends Task {
     }
 
     @Override
-    public long getDuration() {
+    public Duration getDuration() {
         if (duration == null || endTime == null) {
-            return Duration.ZERO.toMinutes();
+            return Duration.ZERO;
         } else {
-            return Duration.between(startTime, endTime).toMinutes();
+            return Duration.between(startTime, endTime);
         }
     }
 }

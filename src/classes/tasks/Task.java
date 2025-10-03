@@ -2,6 +2,7 @@ package classes.tasks;
 
 import classes.enums.TaskType;
 import classes.enums.TaskStatus;
+import com.google.gson.annotations.SerializedName;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -9,14 +10,23 @@ import java.util.Objects;
 
 public class Task {
 
+    @SerializedName("id")
     protected int id;
+    @SerializedName("title")
     protected String title;
+    @SerializedName("description")
     protected String description;
+    @SerializedName("status")
     protected TaskStatus status;
+    @SerializedName("duration")
     protected Duration duration;
+    @SerializedName("startTime")
     protected LocalDateTime startTime;
 
     public Task() {
+        status = TaskStatus.NEW;
+        startTime = LocalDateTime.now();
+        duration = Duration.ofMinutes(5);
     }
 
     public Task(String title, String description) {
@@ -78,11 +88,11 @@ public class Task {
         return startTime;
     }
 
-    public long getDuration() {
+    public Duration getDuration() {
         if (duration == null) {
-            return Duration.ZERO.toMinutes();
+            return Duration.ZERO;
         } else {
-            return duration.toMinutes();
+            return duration;
         }
     }
 

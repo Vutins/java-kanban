@@ -19,6 +19,9 @@ class BasicHandler implements HttpHandler {
 
     protected final TaskManager taskManager;
     protected final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
+            .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
             .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .create();
