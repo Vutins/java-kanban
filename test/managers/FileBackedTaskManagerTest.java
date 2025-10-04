@@ -48,6 +48,7 @@ public class FileBackedTaskManagerTest {
         }
     }
 
+
     @Test
     void shouldAddTasksInFile() throws IOException {
         taskManager = FileBackedTaskManager.loadFromFile(Path.of(String.valueOf(File.createTempFile("data", ".txt"))));
@@ -93,7 +94,6 @@ public class FileBackedTaskManagerTest {
         for (Subtask subtask : taskManager.getSubtasks()) {
             System.out.println(subtask);
         }
-
         taskManager.removeTaskById(0);
         taskManager.removeSubtaskById(3);
     }

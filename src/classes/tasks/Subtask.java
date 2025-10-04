@@ -8,7 +8,11 @@ import java.time.LocalDateTime;
 
 public class Subtask extends Task {
 
-    private final Integer epicId;
+    private Integer epicId;
+
+    public Subtask() {
+        super();
+    }
 
     public Subtask(String title, String description, Integer epicId) {
         super(title, description);

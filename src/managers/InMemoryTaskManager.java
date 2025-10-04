@@ -8,7 +8,6 @@ import classes.tasks.Task;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -122,26 +121,48 @@ public class InMemoryTaskManager implements TaskManager {
     public void addTask(Task task) {
         task.setId(id++);
         taskMaster.put(task.getId(), task);
+
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
     }
 
     @Override
     public void addEpic(Epic epic) {
         epic.setId(id++);
         epicMaster.put(epic.getId(), epic);
+
+        if (epic.getStartTime() != null) {
+            prioritizedTasks.add(epic);
+        }
     }
 
     @Override
     public void addSubtask(Subtask subtask) {
-        if (epicMaster.get(subtask.getEpicId()) != null) {
-            subtask.setId(id++);
-            subtaskMaster.put(subtask.getId(), subtask);
-            if (!subtask.getId().equals(subtask.getEpicId())) {
-                epicMaster.get(subtask.getEpicId()).getEpicSubtasks().put(subtask.getId(), subtask);
-            }
+        Integer epicId = subtask.getEpicId();
+        Epic epic = epicMaster.get(epicId);
 
-            if (epicMaster.get(subtask.getEpicId()).getSubtasks().size() == 1) {
+        if (epic == null) {
+            throw new IllegalArgumentException("Epic with id " + epicId + " not found");
+        }
+
+        if (epic.getEpicSubtasks() == null) {
+            System.out.println("WARNING: epicSubtasks was null for epic id " + epicId);
+        }
+        subtask.setId(id++);
+        subtaskMaster.put(subtask.getId(), subtask);
+        epic.getEpicSubtasks().put(subtask.getId(), subtask);
+
+        if (epic.getSubtasks().size() == 1) {
+            epic.setStartTime(subtask.getStartTime());
+        }
+
+        if (epicMaster.get(subtask.getEpicId()).getSubtasks().size() == 1) {
                 epicMaster.get(subtask.getEpicId()).setStartTime(subtask.getStartTime());
-            }
+        }
+        checkStatus();
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
         }
     }
 
@@ -194,13 +215,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtaskById(Integer id) throws IOException {
-        if (subtaskMaster.get(id) != null) {
-            prioritizedTasks.remove(subtaskMaster.get(id));
-        }
-        if (taskMaster.get(id) != null) {
-            epicMaster.get(subtaskMaster.get(id).getEpicId()).getEpicSubtasks().remove(id);
-            historyManager.remove(id);
+        Subtask subtask = subtaskMaster.get(id);
+        if (subtask != null) {
+            prioritizedTasks.remove(subtask);
+
+            Epic epic = epicMaster.get(subtask.getEpicId());
+            if (epic != null && epic.getEpicSubtasks() != null) {
+                epic.getEpicSubtasks().remove(id);
+            }
+
             subtaskMaster.remove(id);
+            historyManager.remove(id);
+            checkStatus();
         }
     }
 
@@ -250,9 +276,21 @@ public class InMemoryTaskManager implements TaskManager {
     protected void settingsPrioritizedTasks() {
         prioritizedTasks = new TreeSet<>(comparatorStartTime());
 
-        prioritizedTasks.stream()
-                .filter(task -> task.getStartTime() != null)
-                .collect(Collectors.toCollection(TreeSet:: new));
+        for (Task task : taskMaster.values()) {
+            if (task.getStartTime() != null) {
+                prioritizedTasks.add(task);
+            }
+        }
+        for (Epic epic : epicMaster.values()) {
+            if (epic.getStartTime() != null) {
+                prioritizedTasks.add(epic);
+            }
+        }
+        for (Subtask subtask : subtaskMaster.values()) {
+            if (subtask.getStartTime() != null) {
+                prioritizedTasks.add(subtask);
+            }
+        }
     }
 
     private Comparator<Task> comparatorStartTime() {
